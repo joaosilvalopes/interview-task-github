@@ -117,49 +117,50 @@ type SearchFormOnSubmitEvent = FormEvent<HTMLFormElement> & {
     }
 }
 
-type SearchUsersResponseData = { items: { login: string }[] };
+type SearchUsersResponseData = { items: { login: string }[], total_count: number };
 
 const Search = () => {
     const [searchResults, setSearchResults] = useState<string[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [resultCount, setResultCount] = useState<number>(0);
+    const [searchQuery, setSearchQuery] = useState<string>('');
 
-    const isLoadingRef = useRef<boolean>(false);
-    const usernameRef = useRef<string>();
-    const lastPageRef = useRef<number>(1);
+    const pageRef = useRef<number>(1);
+    const fetchNextPageRef = useRef<(reset: boolean) => void>(() => {});
 
-    const fetchNextPage = useCallback(async () => {        
-        if(isLoadingRef.current) return;
+    fetchNextPageRef.current = async (reset: boolean) => {
+        if(!searchQuery || isLoading) return;
+
+        if(reset) pageRef.current = 1;
 
         setIsLoading(true);
-        isLoadingRef.current = true;
 
         try {
-            const res = await fetch(`https://api.github.com/search/users?q=${usernameRef.current}&per_page=100&page=${lastPageRef.current}&sort=followers`)
+            const res = await fetch(`https://api.github.com/search/users?q=${searchQuery}&per_page=100&page=${pageRef.current}&sort=followers`)
 
             if(!res.ok) throw res;
 
             const data: SearchUsersResponseData = await res.json();
 
-            lastPageRef.current++;
+            pageRef.current++;
 
             const newSearchResults = data.items.map((item) => item.login);
 
-            setSearchResults((prevSearchResults) => [...prevSearchResults, ...newSearchResults]);
+            setResultCount(data.total_count);
+            setSearchResults(reset ? newSearchResults : (prevSearchResults) => [...prevSearchResults, ...newSearchResults]);
         } catch(e) {
             console.error(e);
         }
 
         setIsLoading(false);
-        isLoadingRef.current = false;
-    }, [setIsLoading, setSearchResults]);
+    };
 
     useEffect(() => {
         const handleScroll = throttle(() => {
             const isAtPageBottom = window.innerHeight + document.documentElement.scrollTop === document.documentElement.offsetHeight;
-            const isSearching = !!usernameRef.current;
 
-            if (isAtPageBottom && isSearching) {
-                fetchNextPage();
+            if (isAtPageBottom) {
+              fetchNextPageRef.current(false);
             }
         }, 100);
 
@@ -168,14 +169,16 @@ const Search = () => {
         return () => {
             document.removeEventListener('scroll', handleScroll);
         };
-    }, [fetchNextPage]);
+    }, []);
+
+    useEffect(() => {
+      fetchNextPageRef.current(true)
+    }, [searchQuery]);
 
     const handleSubmit = async (event: SearchFormOnSubmitEvent) => {
         event.preventDefault();
 
-        usernameRef.current = event.target.username.value;
-
-        fetchNextPage();
+        setSearchQuery(event.target.username.value);
     };
 
     return (
@@ -186,6 +189,7 @@ const Search = () => {
                 <SearchInput type="text" id="username" name="username" />
                 <SearchButton type="submit">Search</SearchButton>
             </SearchForm>
+            {!!resultCount && <p>Found {resultCount} results for {searchQuery}</p>}
             {searchResults.length > 0 && (
                 <>
                     <h2 style={{ fontSize: '2rem' }}>Search Results:</h2>
