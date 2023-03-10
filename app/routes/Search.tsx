@@ -3,13 +3,13 @@ import throttle from 'lodash.throttle';
 
 import { SearchContainer, Title, SearchForm, SearchInput, SearchButton, SearchResultList, SearchResultListItem, SearchResultLink } from './Search.styles';
 
+import searchUsers from '~/sdk/searchUsers';
+
 type SearchFormOnSubmitEvent = FormEvent<HTMLFormElement> & {
   target: HTMLFormElement & {
     username: HTMLInputElement
   }
 }
-
-type SearchUsersResponseData = { items: { login: string }[], total_count: number };
 
 const Search = () => {
   const [usernames, setUsernames] = useState<string[]>([]);
@@ -29,18 +29,12 @@ const Search = () => {
     setIsLoadingNextPage(true);
 
     try {
-      const res = await fetch(`https://api.github.com/search/users?q=${searchQuery}&per_page=100&page=${pageRef.current}&sort=followers`)
-
-      if (!res.ok) throw res;
-
-      const data: SearchUsersResponseData = await res.json();
+      const searchResult = await searchUsers(searchQuery, pageRef.current);
 
       pageRef.current++;
 
-      const newSearchResults = data.items.map((item) => item.login);
-
-      setResultCount(data.total_count);
-      setUsernames(reset ? newSearchResults : (prevSearchResults) => prevSearchResults.concat(newSearchResults));
+      setResultCount(searchResult.totalCount);
+      setUsernames(reset ? searchResult.usernames : (prevUsernames) => prevUsernames.concat(searchResult.usernames));
     } catch (e) {
       console.error(e);
     }
