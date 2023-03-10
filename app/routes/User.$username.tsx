@@ -48,7 +48,7 @@ const UserPage = () => {
     if(!isNextPageLoaded) {
       const repos = await getRepositories(user.username, currentPage + 1);
 
-      setRepos(repos);
+      setRepos(prevRepos => prevRepos.concat(repos));
     }
 
     setCurrentPage(currentPage + 1);
