@@ -45,7 +45,7 @@ const UserPage = () => {
   const nextPage = async () => {
     const isNextPageLoaded = repos.length >= (currentPage + 1) * REPOS_PER_PAGE;
 
-    if(!isNextPageLoaded) {
+    if (!isNextPageLoaded) {
       const repos = await getRepositories(user.username, currentPage + 1);
 
       setRepos(prevRepos => prevRepos.concat(repos));
@@ -53,31 +53,30 @@ const UserPage = () => {
 
     setCurrentPage(currentPage + 1);
   }
-
   return (
     <>
       <UserHeader>
-        <UserAvatar src={user.avatarUrl} />
-        <UserName>{user.name}</UserName>
-        <UserRepositoriesCount>Total number of repositories: {user.repositoriesCount}</UserRepositoriesCount>
+        <UserAvatar src={user.avatarUrl} data-testid="user-avatar" />
+        <UserName data-testid="user-name">{user.name}</UserName>
+        <UserRepositoriesCount data-testid="user-repos-count">Total number of repositories: {user.repositoriesCount}</UserRepositoriesCount>
       </UserHeader>
       <UserRepositoriesList>
         {visibleRepos.map(repo => (
           <UserRepository key={repo.id}>
-            <UserRepositoryName>{repo.name}</UserRepositoryName>
-            <UserRepositoryDescription>{repo.description}</UserRepositoryDescription>
+            <UserRepositoryName data-testid={`repo-name-${repo.id}`}>{repo.name}</UserRepositoryName>
+            <UserRepositoryDescription data-testid={`repo-description-${repo.id}`}>{repo.description}</UserRepositoryDescription>
           </UserRepository>
         ))}
       </UserRepositoriesList>
       <Pagination>
-        <PageCount>{currentPage}/{lastPage}</PageCount>
+        <PageCount data-testid="page-count">{currentPage}/{lastPage}</PageCount>
         {currentPage > 1 && (
-          <PaginationButton onClick={() => setCurrentPage(p => p - 1)}>
+          <PaginationButton data-testid="previous-page-button" onClick={() => setCurrentPage(p => p - 1)}>
             Previous
           </PaginationButton>
         )}
         {currentPage < lastPage && (
-          <PaginationButton onClick={nextPage}>
+          <PaginationButton data-testid="next-page-button" onClick={nextPage}>
             Next
           </PaginationButton>
         )}

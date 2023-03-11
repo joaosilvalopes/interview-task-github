@@ -1,0 +1,214 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Search component fetches the next page of users when scrolled to the bottom of the page 1`] = `
+<DocumentFragment>
+  <main
+    class="sc-beySbM ecnJdQ"
+  >
+    <h1
+      class="sc-guDLRT hBSIrn"
+    >
+      Github User Search
+    </h1>
+    <form
+      class="sc-dmyDGi lhIuuh"
+      data-testid="search-form"
+    >
+      <input
+        class="sc-hLQRIN dXWFfT"
+        data-testid="search-input"
+        id="username"
+        name="username"
+        placeholder="username"
+        type="text"
+      />
+      <button
+        class="sc-eDLJxc jIgEkF"
+        data-testid="search-button"
+        type="submit"
+      >
+        Search
+      </button>
+    </form>
+    <p
+      data-testid="result-count"
+    >
+      Found 6 results for testuser
+    </p>
+    <ul
+      class="sc-jTQDnj gMcIqE"
+    >
+      <li
+        class="sc-gLLvby ivATsu"
+      >
+        <a
+          class="sc-iBdmCd QGtut"
+          data-testid="search-result-link-user1"
+          href="/user/user1"
+        >
+          user1
+        </a>
+      </li>
+      <li
+        class="sc-gLLvby ivATsu"
+      >
+        <a
+          class="sc-iBdmCd QGtut"
+          data-testid="search-result-link-user2"
+          href="/user/user2"
+        >
+          user2
+        </a>
+      </li>
+      <li
+        class="sc-gLLvby ivATsu"
+      >
+        <a
+          class="sc-iBdmCd QGtut"
+          data-testid="search-result-link-user3"
+          href="/user/user3"
+        >
+          user3
+        </a>
+      </li>
+      <li
+        class="sc-gLLvby ivATsu"
+      >
+        <a
+          class="sc-iBdmCd QGtut"
+          data-testid="search-result-link-user4"
+          href="/user/user4"
+        >
+          user4
+        </a>
+      </li>
+      <li
+        class="sc-gLLvby ivATsu"
+      >
+        <a
+          class="sc-iBdmCd QGtut"
+          data-testid="search-result-link-user5"
+          href="/user/user5"
+        >
+          user5
+        </a>
+      </li>
+      <li
+        class="sc-gLLvby ivATsu"
+      >
+        <a
+          class="sc-iBdmCd QGtut"
+          data-testid="search-result-link-user6"
+          href="/user/user6"
+        >
+          user6
+        </a>
+      </li>
+    </ul>
+    <p
+      data-testid="loading-indicator"
+    >
+      Loading...
+    </p>
+  </main>
+</DocumentFragment>
+`;
+
+exports[`Search component renders the search input and button 1`] = `
+<DocumentFragment>
+  <main
+    class="sc-beySbM ecnJdQ"
+  >
+    <h1
+      class="sc-guDLRT hBSIrn"
+    >
+      Github User Search
+    </h1>
+    <form
+      class="sc-dmyDGi lhIuuh"
+      data-testid="search-form"
+    >
+      <input
+        class="sc-hLQRIN dXWFfT"
+        data-testid="search-input"
+        id="username"
+        name="username"
+        placeholder="username"
+        type="text"
+      />
+      <button
+        class="sc-eDLJxc jIgEkF"
+        data-testid="search-button"
+        type="submit"
+      >
+        Search
+      </button>
+    </form>
+  </main>
+</DocumentFragment>
+`;
+
+exports[`Search component searches for users when the form is submitted 1`] = `
+<DocumentFragment>
+  <main
+    class="sc-beySbM ecnJdQ"
+  >
+    <h1
+      class="sc-guDLRT hBSIrn"
+    >
+      Github User Search
+    </h1>
+    <form
+      class="sc-dmyDGi lhIuuh"
+      data-testid="search-form"
+    >
+      <input
+        class="sc-hLQRIN dXWFfT"
+        data-testid="search-input"
+        id="username"
+        name="username"
+        placeholder="username"
+        type="text"
+      />
+      <button
+        class="sc-eDLJxc jIgEkF"
+        data-testid="search-button"
+        type="submit"
+      >
+        Search
+      </button>
+    </form>
+    <p
+      data-testid="result-count"
+    >
+      Found 6 results for testuser
+    </p>
+    <ul
+      class="sc-jTQDnj gMcIqE"
+    >
+      <li
+        class="sc-gLLvby ivATsu"
+      >
+        <a
+          class="sc-iBdmCd QGtut"
+          data-testid="search-result-link-user1"
+          href="/user/user1"
+        >
+          user1
+        </a>
+      </li>
+      <li
+        class="sc-gLLvby ivATsu"
+      >
+        <a
+          class="sc-iBdmCd QGtut"
+          data-testid="search-result-link-user2"
+          href="/user/user2"
+        >
+          user2
+        </a>
+      </li>
+    </ul>
+  </main>
+</DocumentFragment>
+`;

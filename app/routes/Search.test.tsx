@@ -1,49 +1,50 @@
-import React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
-import { render, fireEvent, waitFor, screen } from '@testing-library/react';
+import { render, fireEvent, waitFor } from '@testing-library/react';
 import Search from './Search';
 
-const usernames = ['user1', 'user2', 'user3', 'user4', 'user5', 'use6'];
+const usernames = ['user1', 'user2', 'user3', 'user4', 'user5', 'user6'];
 const pageSize = 2;
-const totalCount = 6;
 
 jest.mock('~/sdk/searchUsers', () => jest.fn((_,page) => {
-  return new Promise((resolve) => setTimeout(() => resolve({ totalCount, usernames: usernames.slice((page - 1) * pageSize, page * pageSize) }), 100));
+  return new Promise((resolve) => setTimeout(() => resolve({ totalCount: usernames.length, usernames: usernames.slice((page - 1) * pageSize, page * pageSize) }), 100));
 }));
 
-const renderWithRouter = (element: React.ReactElement) => render(<Router>{element}</Router>)
+const renderWithRouter = () => render(<Router><Search/></Router>)
 
 describe('Search component', () => {
-  beforeEach(() => {
-    jest.clearAllMocks();
-  });
-
-  const expectResult = async (page: number) => {
+  const expectPageResult = async (page: number, getByTestId: (testId: string) => HTMLElement) => {
     await waitFor(() => {
-      expect(screen.getByTestId('result-count').textContent).toMatch(new RegExp(`found ${totalCount} results for testuser`, 'i'));
-      expect(screen.getAllByTestId('search-result-link')).toHaveLength(pageSize * page);
+      expect(getByTestId('result-count')).toHaveTextContent(`Found ${usernames.length} results for testuser`);
+
+      usernames.slice(0, pageSize * page).forEach((username) => {
+        expect(getByTestId(`search-result-link-${username}`)).toHaveTextContent(username);
+      });
     });
   }
 
   it('renders the search input and button', () => {
-    const { getByTestId } = renderWithRouter(<Search />);
+    const { getByTestId, asFragment } = renderWithRouter();
 
     expect(getByTestId('search-form')).toBeInTheDocument();
     expect(getByTestId('search-input')).toBeInTheDocument();
     expect(getByTestId('search-button')).toBeInTheDocument();
+    expect(asFragment()).toMatchSnapshot();
   });
 
   it('searches for users when the form is submitted', async () => {
-    const { getByTestId } = renderWithRouter(<Search />);
+    const { getByTestId, asFragment } = renderWithRouter();
+
     fireEvent.submit(getByTestId('search-form'), { target: { username: { value: 'testuser' } } });
 
     expect(getByTestId('loading-indicator')).toBeInTheDocument();
 
-    await expectResult(1);
+    await expectPageResult(1, getByTestId);
+
+    expect(asFragment()).toMatchSnapshot();
   });
 
   it('fetches the next page of users when scrolled to the bottom of the page', async () => {
-    const { getByTestId } = renderWithRouter(<Search />);
+    const { getByTestId, asFragment } = renderWithRouter();
 
     // Scroll to the bottom of the page
     window.innerHeight = 500;
@@ -56,12 +57,14 @@ describe('Search component', () => {
 
     fireEvent.submit(getByTestId('search-form'), { target: { username: { value: 'testuser' } } });
 
-    for(let page = 1; page <= Math.ceil(totalCount / pageSize); page++) {
+    for(let page = 1; page <= Math.ceil(usernames.length / pageSize); page++) {
       expect(getByTestId('loading-indicator')).toBeInTheDocument();
 
-      await expectResult(page);
+      await expectPageResult(page, getByTestId);
   
       fireEvent.scroll(document);
     }
+
+    expect(asFragment()).toMatchSnapshot();
   });
 });
