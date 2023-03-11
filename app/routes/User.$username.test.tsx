@@ -43,6 +43,7 @@ describe('UserPage component', () => {
             expect(getByTestId(`repo-description-${repo.id}`)).toHaveTextContent(repo.description);
         }
 
+        expect(queryByTestId(`loading-page-indicator`)).not.toBeInTheDocument();
         expect(getByTestId('page-count')).toHaveTextContent(`1/${Math.ceil(user.repositoriesCount / pageSize)}`);
         expect(queryByTestId(`previous-page-button`)).not.toBeInTheDocument();
         expect(getByTestId(`next-page-button`)).toBeInTheDocument();
@@ -51,6 +52,8 @@ describe('UserPage component', () => {
     
         fireEvent.click(nextPageButton);
 
+        expect(getByTestId(`loading-page-indicator`)).toBeInTheDocument();
+
         await waitFor(() => {
             for(const repo of repositories.slice(pageSize, pageSize * 2)) {
                 expect(getByTestId(`repo-name-${repo.id}`)).toHaveTextContent(repo.name);
@@ -58,11 +61,14 @@ describe('UserPage component', () => {
             }
         })
 
+        expect(queryByTestId(`loading-page-indicator`)).not.toBeInTheDocument();
         expect(getByTestId('page-count')).toHaveTextContent(`2/${Math.ceil(user.repositoriesCount / pageSize)}`);
         expect(getByTestId(`previous-page-button`)).toBeInTheDocument();
         expect(getByTestId(`next-page-button`)).toBeInTheDocument();
 
         fireEvent.click(nextPageButton);
+
+        expect(getByTestId(`loading-page-indicator`)).toBeInTheDocument();
 
         await waitFor(() => {
             for(const repo of repositories.slice(pageSize * 2, pageSize * 3)) {
@@ -71,6 +77,7 @@ describe('UserPage component', () => {
             }
         })
 
+        expect(queryByTestId(`loading-page-indicator`)).not.toBeInTheDocument();
         expect(getByTestId('page-count')).toHaveTextContent(`3/${Math.ceil(user.repositoriesCount / pageSize)}`);
         expect(getByTestId(`previous-page-button`)).toBeInTheDocument();
         expect(queryByTestId(`next-page-button`)).not.toBeInTheDocument();

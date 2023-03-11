@@ -3,21 +3,21 @@
 exports[`UserPage component renders user information and repositories 1`] = `
 <DocumentFragment>
   <header
-    class="sc-beySbM ktWUDE"
+    class="sc-beySbM kYDCsI"
   >
     <img
-      class="sc-guDLRT UwKre"
+      class="sc-guDLRT dVWhez"
       data-testid="user-avatar"
       src="https://example.com/avatar.png"
     />
     <h1
-      class="sc-dmyDGi hzfRPu"
+      class="sc-dmyDGi fRGVKL"
       data-testid="user-name"
     >
       Test User
     </h1>
     <p
-      class="sc-hLQRIN jxecGB"
+      class="sc-hLQRIN jvyuRi"
       data-testid="user-repos-count"
     >
       Total number of repositories: 30
@@ -30,13 +30,13 @@ exports[`UserPage component renders user information and repositories 1`] = `
       class="sc-jTQDnj RMjSV"
     >
       <h2
-        class="sc-gLLvby yIBcy"
+        class="sc-gLLvby djhHsJ"
         data-testid="repo-name-21"
       >
         Repository 21
       </h2>
       <p
-        class="sc-iBdmCd dPOCJO"
+        class="sc-iBdmCd hmNQKR"
         data-testid="repo-description-21"
       >
         Description of Repository 21
@@ -46,13 +46,13 @@ exports[`UserPage component renders user information and repositories 1`] = `
       class="sc-jTQDnj RMjSV"
     >
       <h2
-        class="sc-gLLvby yIBcy"
+        class="sc-gLLvby djhHsJ"
         data-testid="repo-name-22"
       >
         Repository 22
       </h2>
       <p
-        class="sc-iBdmCd dPOCJO"
+        class="sc-iBdmCd hmNQKR"
         data-testid="repo-description-22"
       >
         Description of Repository 22
@@ -62,13 +62,13 @@ exports[`UserPage component renders user information and repositories 1`] = `
       class="sc-jTQDnj RMjSV"
     >
       <h2
-        class="sc-gLLvby yIBcy"
+        class="sc-gLLvby djhHsJ"
         data-testid="repo-name-23"
       >
         Repository 23
       </h2>
       <p
-        class="sc-iBdmCd dPOCJO"
+        class="sc-iBdmCd hmNQKR"
         data-testid="repo-description-23"
       >
         Description of Repository 23
@@ -78,13 +78,13 @@ exports[`UserPage component renders user information and repositories 1`] = `
       class="sc-jTQDnj RMjSV"
     >
       <h2
-        class="sc-gLLvby yIBcy"
+        class="sc-gLLvby djhHsJ"
         data-testid="repo-name-24"
       >
         Repository 24
       </h2>
       <p
-        class="sc-iBdmCd dPOCJO"
+        class="sc-iBdmCd hmNQKR"
         data-testid="repo-description-24"
       >
         Description of Repository 24
@@ -94,13 +94,13 @@ exports[`UserPage component renders user information and repositories 1`] = `
       class="sc-jTQDnj RMjSV"
     >
       <h2
-        class="sc-gLLvby yIBcy"
+        class="sc-gLLvby djhHsJ"
         data-testid="repo-name-25"
       >
         Repository 25
       </h2>
       <p
-        class="sc-iBdmCd dPOCJO"
+        class="sc-iBdmCd hmNQKR"
         data-testid="repo-description-25"
       >
         Description of Repository 25
@@ -110,13 +110,13 @@ exports[`UserPage component renders user information and repositories 1`] = `
       class="sc-jTQDnj RMjSV"
     >
       <h2
-        class="sc-gLLvby yIBcy"
+        class="sc-gLLvby djhHsJ"
         data-testid="repo-name-26"
       >
         Repository 26
       </h2>
       <p
-        class="sc-iBdmCd dPOCJO"
+        class="sc-iBdmCd hmNQKR"
         data-testid="repo-description-26"
       >
         Description of Repository 26
@@ -126,13 +126,13 @@ exports[`UserPage component renders user information and repositories 1`] = `
       class="sc-jTQDnj RMjSV"
     >
       <h2
-        class="sc-gLLvby yIBcy"
+        class="sc-gLLvby djhHsJ"
         data-testid="repo-name-27"
       >
         Repository 27
       </h2>
       <p
-        class="sc-iBdmCd dPOCJO"
+        class="sc-iBdmCd hmNQKR"
         data-testid="repo-description-27"
       >
         Description of Repository 27
@@ -142,13 +142,13 @@ exports[`UserPage component renders user information and repositories 1`] = `
       class="sc-jTQDnj RMjSV"
     >
       <h2
-        class="sc-gLLvby yIBcy"
+        class="sc-gLLvby djhHsJ"
         data-testid="repo-name-28"
       >
         Repository 28
       </h2>
       <p
-        class="sc-iBdmCd dPOCJO"
+        class="sc-iBdmCd hmNQKR"
         data-testid="repo-description-28"
       >
         Description of Repository 28
@@ -158,13 +158,13 @@ exports[`UserPage component renders user information and repositories 1`] = `
       class="sc-jTQDnj RMjSV"
     >
       <h2
-        class="sc-gLLvby yIBcy"
+        class="sc-gLLvby djhHsJ"
         data-testid="repo-name-29"
       >
         Repository 29
       </h2>
       <p
-        class="sc-iBdmCd dPOCJO"
+        class="sc-iBdmCd hmNQKR"
         data-testid="repo-description-29"
       >
         Description of Repository 29
@@ -174,13 +174,13 @@ exports[`UserPage component renders user information and repositories 1`] = `
       class="sc-jTQDnj RMjSV"
     >
       <h2
-        class="sc-gLLvby yIBcy"
+        class="sc-gLLvby djhHsJ"
         data-testid="repo-name-30"
       >
         Repository 30
       </h2>
       <p
-        class="sc-iBdmCd dPOCJO"
+        class="sc-iBdmCd hmNQKR"
         data-testid="repo-description-30"
       >
         Description of Repository 30
@@ -190,21 +190,21 @@ exports[`UserPage component renders user information and repositories 1`] = `
   <div
     class="sc-fsYeqs kLqGoS"
   >
-    <span
-      class="sc-kFCsca fkIoXp"
-      data-testid="page-count"
-    >
-      3/3
-    </span>
     <button
-      class="sc-qZqnM dIXvKj"
+      class="sc-qZqnM jbOvBn"
       data-testid="previous-page-button"
     >
       Previous
     </button>
+    <span
+      class="sc-kFCsca hANyfT"
+      data-testid="page-count"
+    >
+      3/3
+    </span>
   </div>
   <a
-    class="sc-jsEegt eDKeta"
+    class="sc-jsEegt wKvXi"
     href="/"
   >
     Go back to Root route
