@@ -22,6 +22,7 @@ const Search = () => {
   const fetchNextPageRef = useRef<(reset: boolean) => void>(() => { });
 
   fetchNextPageRef.current = async (reset: boolean) => {
+
     if (!searchQuery || isLoadingNextPage) return;
 
     if (reset) pageRef.current = 1;
@@ -32,7 +33,7 @@ const Search = () => {
       const searchResult = await searchUsers(searchQuery, pageRef.current);
 
       pageRef.current++;
-
+      
       setResultCount(searchResult.totalCount);
       setUsernames(reset ? searchResult.usernames : (prevUsernames) => prevUsernames.concat(searchResult.usernames));
     } catch (e) {
@@ -59,7 +60,7 @@ const Search = () => {
   }, []);
 
   useEffect(() => {
-    fetchNextPageRef.current(true)
+    fetchNextPageRef.current(true);
   }, [searchQuery]);
 
   const handleSubmit = async (event: SearchFormOnSubmitEvent) => {
@@ -71,21 +72,21 @@ const Search = () => {
   return (
     <SearchContainer>
       <Title>Github User Search</Title>
-      <SearchForm onSubmit={handleSubmit}>
-        <SearchInput placeholder="username" type="text" id="username" name="username" />
-        <SearchButton type="submit">Search</SearchButton>
+      <SearchForm onSubmit={handleSubmit} data-testid="search-form">
+        <SearchInput placeholder="username" type="text" id="username" name="username" data-testid="search-input" />
+        <SearchButton type="submit" data-testid="search-button">Search</SearchButton>
       </SearchForm>
-      {!!resultCount && <p>Found {resultCount} results for {searchQuery}</p>}
+      {!!resultCount && <p data-testid="result-count">Found {resultCount} results for {searchQuery}</p>}
       {usernames.length > 0 && (
         <SearchResultList>
           {usernames.map((username) => (
             <SearchResultListItem key={username}>
-              <SearchResultLink onClick={() => setLoadingUser(username)} to={`/user/${username}`}>{loadingUser === username ? 'Loading' : username}</SearchResultLink>
+              <SearchResultLink onClick={() => setLoadingUser(username)} to={`/user/${username}`} data-testid="search-result-link">{loadingUser === username ? 'Loading' : username}</SearchResultLink>
             </SearchResultListItem>
           ))}
         </SearchResultList>
       )}
-      {isLoadingNextPage && <p>Loading...</p>}
+      {isLoadingNextPage && <p data-testid="loading-indicator">Loading...</p>}
     </SearchContainer>
   );
 };
