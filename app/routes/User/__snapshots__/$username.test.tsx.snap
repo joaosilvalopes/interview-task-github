@@ -191,7 +191,7 @@ exports[`UserPage component renders user information and repositories 1`] = `
     class="sc-fsYeqs kLqGoS"
   >
     <button
-      class="sc-qZqnM jbOvBn"
+      class="sc-qZqnM jSkgOL"
       data-testid="previous-page-button"
     >
       Previous

@@ -1,7 +1,7 @@
 import { fireEvent, render, waitFor } from '@testing-library/react';
 import { BrowserRouter as Router } from 'react-router-dom';
 
-import User from './User.$username';
+import User from './$username';
 
 const pageSize = 10;
 
@@ -18,13 +18,17 @@ const repositories = Array.from({ length: user.repositoriesCount }, (_, i) => ({
     description: `Description of Repository ${i + 1}`
 }));
 
-jest.mock('~/sdk/getRepositories', () => jest.fn((_, page: number) => repositories.slice((page - 1) * pageSize, page * pageSize)));
+const repositoriesFirstPage = repositories.slice(0, pageSize);
+
+jest.mock('~/sdk/getRepositories', () => jest.fn((_,page) => {
+    return new Promise((resolve) => setTimeout(() => resolve(repositories.slice((page - 1) * pageSize, page * pageSize)), 100));
+  }));
 
 jest.mock('@remix-run/react', () => ({
     ...jest.requireActual('@remix-run/react'),
     useLoaderData: jest.fn(() => ({
         user,
-        repositories: repositories.slice(0, pageSize),
+        repositories: repositoriesFirstPage,
     })),
 }));
 
@@ -53,6 +57,7 @@ describe('UserPage component', () => {
         fireEvent.click(nextPageButton);
 
         expect(getByTestId(`loading-page-indicator`)).toBeInTheDocument();
+        expect(getByTestId(`next-page-button`)).toBeDisabled();
 
         await waitFor(() => {
             for(const repo of repositories.slice(pageSize, pageSize * 2)) {
@@ -69,6 +74,7 @@ describe('UserPage component', () => {
         fireEvent.click(nextPageButton);
 
         expect(getByTestId(`loading-page-indicator`)).toBeInTheDocument();
+        expect(queryByTestId(`next-page-button`)).not.toBeInTheDocument();
 
         await waitFor(() => {
             for(const repo of repositories.slice(pageSize * 2, pageSize * 3)) {
@@ -80,7 +86,6 @@ describe('UserPage component', () => {
         expect(queryByTestId(`loading-page-indicator`)).not.toBeInTheDocument();
         expect(getByTestId('page-count')).toHaveTextContent(`3/${Math.ceil(user.repositoriesCount / pageSize)}`);
         expect(getByTestId(`previous-page-button`)).toBeInTheDocument();
-        expect(queryByTestId(`next-page-button`)).not.toBeInTheDocument();
 
         expect(asFragment()).toMatchSnapshot();
     });

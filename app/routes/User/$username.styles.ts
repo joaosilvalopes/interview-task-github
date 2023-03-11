@@ -78,8 +78,13 @@ export const PaginationButton = styled.button`
   color: #333;
   box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.2);
 
-  &:hover {
+  &:not(:disabled):hover {
     background-color: #ddd;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
   }
 `;
 

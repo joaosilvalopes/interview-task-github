@@ -1,11 +1,12 @@
 import { LoaderArgs } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
-import { useEffect, useState } from 'react';
+import { useCallback } from 'react';
+import usePagination from '~/hooks/usePagination';
 
 import getRepositories, { Repository } from '~/sdk/getRepositories';
 import getUser, { User } from '~/sdk/getUser';
 
-import { BackLink, Pagination, PaginationButton, UserAvatar, UserHeader, UserName, UserRepositoriesCount, UserRepositoriesList, UserRepository, UserRepositoryDescription, UserRepositoryName, PageCount } from './User.styles';
+import { BackLink, Pagination, PaginationButton, UserAvatar, UserHeader, UserName, UserRepositoriesCount, UserRepositoriesList, UserRepository, UserRepositoryDescription, UserRepositoryName, PageCount } from './$username.styles';
 
 type UserLoaderArgs = LoaderArgs & {
   params: {
@@ -33,29 +34,10 @@ export const loader = async ({ params }: UserLoaderArgs) => {
   }
 };
 
-const REPOS_PER_PAGE = 10;
-
 const UserPage = () => {
   const { user, repositories } = useLoaderData<ServerData>();
-  const [repos, setRepos] = useState<Repository[]>(repositories);
-  const [currentPage, setCurrentPage] = useState(1);
-  const visibleRepos = repos.slice((currentPage - 1) * REPOS_PER_PAGE, currentPage * REPOS_PER_PAGE);
-  const lastPage = Math.ceil(user.repositoriesCount / REPOS_PER_PAGE);
-  const isPageLoaded = repos.length > (currentPage - 1) * REPOS_PER_PAGE;
-
-  const nextPage = async () => {
-    setCurrentPage(currentPage + 1);
-  }
-
-  useEffect(() => {
-    (async () => {
-      if (!isPageLoaded) {
-        const repos = await getRepositories(user.username, currentPage);
-
-        setRepos(prevRepos => prevRepos.concat(repos));
-      }
-    })()
-  }, [currentPage])
+  const fetchPage = (page: number) => getRepositories(user.username, page);
+  const { pageEntries: visibleRepos, isPageLoading, page, pageCount, nextPage, previousPage } = usePagination<Repository>(10, repositories, user.repositoriesCount, fetchPage);
 
   return (
     <>
@@ -65,7 +47,7 @@ const UserPage = () => {
         <UserRepositoriesCount data-testid="user-repos-count">Total number of repositories: {user.repositoriesCount}</UserRepositoriesCount>
       </UserHeader>
       <UserRepositoriesList>
-        {!isPageLoaded ? <p data-testid="loading-page-indicator">Loading</p> : visibleRepos.map(repo => (
+        {isPageLoading ? <p data-testid="loading-page-indicator">Loading</p> : visibleRepos.map(repo => (
           <UserRepository key={repo.id}>
             <UserRepositoryName data-testid={`repo-name-${repo.id}`}>{repo.name}</UserRepositoryName>
             <UserRepositoryDescription data-testid={`repo-description-${repo.id}`}>{repo.description}</UserRepositoryDescription>
@@ -73,14 +55,14 @@ const UserPage = () => {
         ))}
       </UserRepositoriesList>
       <Pagination>
-        {currentPage > 1 && (
-          <PaginationButton data-testid="previous-page-button" onClick={() => setCurrentPage(p => p - 1)}>
+        {page > 1 && (
+          <PaginationButton data-testid="previous-page-button" onClick={previousPage}>
             Previous
           </PaginationButton>
         )}
-        <PageCount data-testid="page-count">{currentPage}/{lastPage}</PageCount>
-        {currentPage < lastPage && (
-          <PaginationButton data-testid="next-page-button" disabled={!isPageLoaded} onClick={nextPage}>
+        <PageCount data-testid="page-count">{page}/{pageCount}</PageCount>
+        {page < pageCount && (
+          <PaginationButton data-testid="next-page-button" disabled={isPageLoading} onClick={nextPage}>
             Next
           </PaginationButton>
         )}

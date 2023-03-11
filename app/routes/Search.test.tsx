@@ -1,23 +1,43 @@
-import { BrowserRouter as Router } from 'react-router-dom';
+import { Routes, Route, MemoryRouter as Router } from 'react-router-dom';
 import { render, fireEvent, waitFor } from '@testing-library/react';
-import Search from './Search';
 
-const usernames = ['user1', 'user2', 'user3', 'user4', 'user5', 'user6'];
-const pageSize = 2;
+import Search from './Search';
+import SearchResults from './Search/$searchQuery';
+
+const pageSize = 100;
+const usernames = Array.from({ length: pageSize * 3 }, (_, i) => `user${i+1}`);
+const usernamesFirstPage = usernames.slice(0, pageSize);
 
 jest.mock('~/sdk/searchUsers', () => jest.fn((_,page) => {
   return new Promise((resolve) => setTimeout(() => resolve({ totalCount: usernames.length, usernames: usernames.slice((page - 1) * pageSize, page * pageSize) }), 100));
 }));
 
-const renderWithRouter = () => render(<Router><Search/></Router>)
+jest.mock('@remix-run/react', () => ({
+  ...jest.requireActual('@remix-run/react'),
+  useLoaderData: jest.fn(() => ({
+      totalCount: usernames.length,
+      usernames: usernamesFirstPage,
+  })),
+}));
+
+const renderWithRouter = () => render(
+  <Router initialEntries={['/search']}>
+    <Routes>
+      <Route path="search" element={<Search/>}>
+        <Route path=":searchQuery" element={<SearchResults />}></Route>
+      </Route>
+    </Routes>
+  </Router>
+);
 
 describe('Search component', () => {
   const expectPageResult = async (page: number, getByTestId: (testId: string) => HTMLElement) => {
     await waitFor(() => {
-      expect(getByTestId('result-count')).toHaveTextContent(`Found ${usernames.length} results for testuser`);
+      expect(getByTestId('result-count')).toHaveTextContent(`Found ${usernames.length} results for testQuery`);
 
       usernames.slice(0, pageSize * page).forEach((username) => {
         expect(getByTestId(`search-result-link-${username}`)).toHaveTextContent(username);
+        expect(getByTestId(`search-result-link-${username}`)).toHaveAttribute('href', `/user/${username}`);
       });
     });
   }
@@ -34,9 +54,7 @@ describe('Search component', () => {
   it('searches for users when the form is submitted', async () => {
     const { getByTestId, asFragment } = renderWithRouter();
 
-    fireEvent.submit(getByTestId('search-form'), { target: { username: { value: 'testuser' } } });
-
-    expect(getByTestId('loading-indicator')).toBeInTheDocument();
+    fireEvent.submit(getByTestId('search-form'), { target: { username: { value: 'testQuery' } } });
 
     await expectPageResult(1, getByTestId);
 
@@ -55,38 +73,16 @@ describe('Search component', () => {
       value: 1500,
     });
 
-    fireEvent.submit(getByTestId('search-form'), { target: { username: { value: 'testuser' } } });
+    fireEvent.submit(getByTestId('search-form'), { target: { username: { value: 'testQuery' } } });
 
     for(let page = 1; page <= Math.ceil(usernames.length / pageSize); page++) {
-      expect(getByTestId('loading-indicator')).toBeInTheDocument();
-
       await expectPageResult(page, getByTestId);
   
       fireEvent.scroll(document);
+
+      expect(getByTestId('loading-indicator')).toBeInTheDocument();
     }
 
-    expect(asFragment()).toMatchSnapshot();
-  });
-
-  it('loads the user page on username link click', async () => {
-    const { getByTestId, asFragment } = renderWithRouter();
-
-    fireEvent.submit(getByTestId('search-form'), { target: { username: { value: 'testuser' } } });
-
-    expect(getByTestId('loading-indicator')).toBeInTheDocument();
-
-    const username = usernames[0];
-
-    await waitFor(() => expect(getByTestId(`search-result-link-${username}`)).toBeInTheDocument());
-
-    const usernameLink = getByTestId(`search-result-link-${username}`);
-
-    expect(usernameLink).toBeInTheDocument();
-    expect(usernameLink).toHaveAttribute('href', `/user/${username}`);
-
-    fireEvent.click(usernameLink);
-
-    expect(usernameLink).toHaveTextContent('Loading');
     expect(asFragment()).toMatchSnapshot();
   });
 });
