@@ -67,4 +67,26 @@ describe('Search component', () => {
 
     expect(asFragment()).toMatchSnapshot();
   });
+
+  it('loads the user page on username link click', async () => {
+    const { getByTestId, asFragment } = renderWithRouter();
+
+    fireEvent.submit(getByTestId('search-form'), { target: { username: { value: 'testuser' } } });
+
+    expect(getByTestId('loading-indicator')).toBeInTheDocument();
+
+    const username = usernames[0];
+
+    await waitFor(() => expect(getByTestId(`search-result-link-${username}`)).toBeInTheDocument());
+
+    const usernameLink = getByTestId(`search-result-link-${username}`);
+
+    expect(usernameLink).toBeInTheDocument();
+    expect(usernameLink).toHaveAttribute('href', `/user/${username}`);
+
+    fireEvent.click(usernameLink);
+
+    expect(usernameLink).toHaveTextContent('Loading');
+    expect(asFragment()).toMatchSnapshot();
+  });
 });
