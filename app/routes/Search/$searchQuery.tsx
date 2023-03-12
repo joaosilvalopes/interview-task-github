@@ -15,11 +15,13 @@ type SearchLoaderArgs = LoaderArgs & {
     }
 };
 
+export const PAGE_SIZE = 100;
+
 export const loader = async ({ params }: SearchLoaderArgs) => {
     const { searchQuery } = params;
 
     try {
-        const { totalCount, usernames } = await searchUsers(searchQuery, 1);
+        const { totalCount, usernames } = await searchUsers(searchQuery, 1, PAGE_SIZE);
 
         return { totalCount, usernames };
     } catch (e) {
@@ -32,9 +34,9 @@ const SearchResults = () => {
     const { totalCount, usernames: firstPageUsernames } = useLoaderData();
     const [loadingUser, setLoadingUser] = useState<string>();
 
-    const fetchPage = useCallback((page: number) => searchUsers(searchQuery as string, page).then((res) => res.usernames), [searchQuery]);
+    const fetchPage = useCallback((page: number) => searchUsers(searchQuery as string, page, PAGE_SIZE).then((res) => res.usernames), [searchQuery]);
 
-    const { isPageLoading, entries: usernames, nextPage } = usePagination<string>(100, firstPageUsernames, totalCount, fetchPage);
+    const { isPageLoading, entries: usernames, nextPage } = usePagination<string>(PAGE_SIZE, firstPageUsernames, totalCount, fetchPage);
 
     useEffect(() => {
         const handleScroll = throttle(() => {

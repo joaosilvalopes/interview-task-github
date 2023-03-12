@@ -1,4 +1,6 @@
-import getRepositories, { Repository } from './getRepositories';
+import { PAGE_SIZE } from '~/routes/User/$username';
+
+import getRepositories from './getRepositories';
 
 describe('getRepositories function', () => {
   afterEach(() => {
@@ -13,7 +15,7 @@ describe('getRepositories function', () => {
       json: () => Promise.resolve(mockRepos),
     } as Response));
 
-    const repos = await getRepositories('testuser', 1);
+    const repos = await getRepositories('testuser', 1, PAGE_SIZE);
 
     expect(repos).toEqual(mockRepos);
   });
@@ -22,6 +24,6 @@ describe('getRepositories function', () => {
     const mockResponse = { ok: false };
     global.fetch = jest.fn(() => Promise.resolve(mockResponse as Response));
 
-    await expect(getRepositories('testuser', 1)).rejects.toEqual(mockResponse);
+    await expect(getRepositories('testuser', 1, PAGE_SIZE)).rejects.toEqual(mockResponse);
   });
 });

@@ -1,6 +1,5 @@
 import { LoaderArgs } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
-import { useCallback } from 'react';
 import usePagination from '~/hooks/usePagination';
 
 import getRepositories, { Repository } from '~/sdk/getRepositories';
@@ -19,13 +18,15 @@ type ServerData = {
   repositories: Repository[];
 };
 
+export const PAGE_SIZE = 10;
+
 export const loader = async ({ params }: UserLoaderArgs) => {
   const { username } = params;
 
   try {
     const [user, repositories] = await Promise.all([
       getUser(username),
-      getRepositories(username, 1),
+      getRepositories(username, 1, PAGE_SIZE),
     ]);
 
     return { user, repositories };
@@ -36,8 +37,8 @@ export const loader = async ({ params }: UserLoaderArgs) => {
 
 const UserPage = () => {
   const { user, repositories } = useLoaderData<ServerData>();
-  const fetchPage = (page: number) => getRepositories(user.username, page);
-  const { pageEntries: visibleRepos, isPageLoading, page, pageCount, nextPage, previousPage } = usePagination<Repository>(10, repositories, user.repositoriesCount, fetchPage);
+  const fetchPage = (page: number) => getRepositories(user.username, page, PAGE_SIZE);
+  const { pageEntries: visibleRepos, isPageLoading, page, pageCount, nextPage, previousPage } = usePagination<Repository>(PAGE_SIZE, repositories, user.repositoriesCount, fetchPage);
 
   return (
     <>

@@ -1,15 +1,14 @@
 import { createMemoryHistory } from '@remix-run/router';
 import { render, fireEvent, waitFor, act } from '@testing-library/react';
 
-import SearchResults from './$searchQuery';
+import SearchResults, { PAGE_SIZE } from './$searchQuery';
 import withRouter from '~/test-utils/withRouter';
 
-const pageSize = 100;
-const usernames = Array.from({ length: pageSize * 3 }, (_, i) => `user${i+1}`);
-const usernamesFirstPage = usernames.slice(0, pageSize);
+const usernames = Array.from({ length: PAGE_SIZE * 3 }, (_, i) => `user${i+1}`);
+const usernamesFirstPage = usernames.slice(0, PAGE_SIZE);
 
 jest.mock('~/sdk/searchUsers', () => jest.fn((_,page) => {
-  return new Promise((resolve) => setTimeout(() => resolve({ totalCount: usernames.length, usernames: usernames.slice((page - 1) * pageSize, page * pageSize) }), 100));
+  return new Promise((resolve) => setTimeout(() => resolve({ totalCount: usernames.length, usernames: usernames.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE) }), 100));
 }));
 
 jest.mock('@remix-run/react', () => ({
@@ -29,7 +28,7 @@ describe('Search component', () => {
     await waitFor(() => {
       expect(getByTestId('result-count')).toHaveTextContent(`Found ${usernames.length} results for testQuery`);
 
-      usernames.slice(0, pageSize * page).forEach((username) => {
+      usernames.slice(0, PAGE_SIZE * page).forEach((username) => {
         expect(getByTestId(`search-result-link-${username}`)).toHaveTextContent(username);
         expect(getByTestId(`search-result-link-${username}`)).toHaveAttribute('href', `/user/${username}`);
       });
@@ -56,7 +55,7 @@ describe('Search component', () => {
       value: 1500,
     });
 
-    const lastPage = Math.ceil(usernames.length / pageSize);
+    const lastPage = Math.ceil(usernames.length / PAGE_SIZE);
 
     for(let page = 1; page <= lastPage; page++) {
       await expectPageResult(page, getByTestId);

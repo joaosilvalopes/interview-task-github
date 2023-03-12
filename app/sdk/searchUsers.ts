@@ -3,8 +3,8 @@ type SearchResult = {
     totalCount: number
 };
 
-const searchUsers = async (searchQuery: string, page: number): Promise<SearchResult> => {
-    const res = await fetch(`https://api.github.com/search/users?q=${searchQuery}&per_page=100&page=${page}&sort=followers`)
+const searchUsers = async (searchQuery: string, page: number, pageSize: number): Promise<SearchResult> => {
+    const res = await fetch(`https://api.github.com/search/users?q=${searchQuery}&per_page=${pageSize}&page=${page}&sort=followers`)
 
     if (!res.ok) throw res;
 

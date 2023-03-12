@@ -4,8 +4,8 @@ export type Repository = {
     description: string;
 };
 
-const getRepositories = async (username: string, page: number): Promise<Repository[]> => {
-    const response = await fetch(`https://api.github.com/users/${username}/repos?page=${page}&per_page=10`);
+const getRepositories = async (username: string, page: number, pageSize: number): Promise<Repository[]> => {
+    const response = await fetch(`https://api.github.com/users/${username}/repos?page=${page}&per_page=${pageSize}`);
 
     if (!response.ok) throw response;
 

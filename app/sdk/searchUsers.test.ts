@@ -1,3 +1,5 @@
+import { PAGE_SIZE } from '~/routes/Search/$searchQuery';
+
 import searchUsers from './searchUsers';
 
 describe('searchUsers', () => {
@@ -21,7 +23,7 @@ describe('searchUsers', () => {
 
     global.fetch = jest.fn(() => Promise.resolve(mockedResponse as Response));
 
-    const result = await searchUsers('test', 1);
+    const result = await searchUsers('test', 1, PAGE_SIZE);
 
     expect(result).toEqual(expectedResponse);
   });
@@ -33,6 +35,6 @@ describe('searchUsers', () => {
 
     global.fetch = jest.fn(() => Promise.resolve(mockedResponse as Response));
 
-    await expect(searchUsers('test', 1)).rejects.toEqual(mockedResponse);
+    await expect(searchUsers('test', 1, PAGE_SIZE)).rejects.toEqual(mockedResponse);
   });
 });
