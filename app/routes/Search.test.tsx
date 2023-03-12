@@ -75,12 +75,14 @@ describe('Search component', () => {
 
     fireEvent.submit(getByTestId('search-form'), { target: { username: { value: 'testQuery' } } });
 
-    for(let page = 1; page <= Math.ceil(usernames.length / pageSize); page++) {
+    const lastPage = Math.ceil(usernames.length / pageSize);
+
+    for(let page = 1; page <= lastPage; page++) {
       await expectPageResult(page, getByTestId);
   
       fireEvent.scroll(document);
 
-      expect(getByTestId('loading-indicator')).toBeInTheDocument();
+      page < lastPage && expect(getByTestId('loading-indicator')).toBeInTheDocument();
     }
 
     expect(asFragment()).toMatchSnapshot();

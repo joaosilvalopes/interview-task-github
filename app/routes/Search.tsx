@@ -36,7 +36,7 @@ const Search = () => {
         <SearchInput placeholder="username" type="text" id="username" name="username" defaultValue={searchQuery} data-testid="search-input" />
         <SearchButton type="submit" data-testid="search-button">{loading ? 'Loading' : 'Search'}</SearchButton>
       </SearchForm>
-      <Outlet />
+      <Outlet key={searchQuery} />
     </SearchContainer>
   );
 };

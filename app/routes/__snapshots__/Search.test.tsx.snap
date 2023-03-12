@@ -3340,11 +3340,6 @@ exports[`Search component fetches the next page of users when scrolled to the bo
         </a>
       </li>
     </ul>
-    <p
-      data-testid="loading-indicator"
-    >
-      Loading...
-    </p>
   </main>
 </DocumentFragment>
 `;

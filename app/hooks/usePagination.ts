@@ -3,11 +3,9 @@ import { useState, useEffect } from "react";
 const usePagination = <T,>(pageSize: number, value: T[], entryCount: number, fetchPage: (page: number) => Promise<T[]>) => {
     const [page, setPage] = useState<number>(1);
     const [entries, setEntries] = useState<T[]>(value);
-    const isPageLoading = entryCount !== 0 && entries.length <= (page - 1) * pageSize;
-
-    useEffect(() => {
-        setEntries(value);
-    }, [value, setEntries]);
+    const hasMoreEntries = entryCount > entries.length;
+    const hasPageEntries = entries.length > (page - 1) * pageSize;
+    const isPageLoading = hasMoreEntries && !hasPageEntries;
 
     useEffect(() => {
         (async () => {
