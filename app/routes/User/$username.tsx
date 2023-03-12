@@ -38,7 +38,20 @@ export const loader = async ({ params }: UserLoaderArgs) => {
 const UserPage = () => {
   const { user, repositories } = useLoaderData<ServerData>();
   const fetchPage = (page: number) => getRepositories(user.username, page, PAGE_SIZE);
-  const { pageEntries: visibleRepos, isPageLoading, page, pageCount, nextPage, previousPage } = usePagination<Repository>(PAGE_SIZE, repositories, user.repositoriesCount, fetchPage);
+
+  const {
+    pageEntries: visibleRepos,
+    isPageLoading,
+    page,
+    pageCount,
+    nextPage,
+    previousPage
+  } = usePagination<Repository>({
+    pageSize: PAGE_SIZE,
+    firstPageEntries: repositories,
+    entryCount: user.repositoriesCount,
+    fetchPage
+  });
 
   return (
     <>

@@ -31,12 +31,21 @@ export const loader = async ({ params }: SearchLoaderArgs) => {
 
 const SearchResults = () => {
     const { searchQuery } = useParams();
-    const { totalCount, usernames: firstPageUsernames } = useLoaderData();
+    const { totalCount, usernames: firstPageEntries } = useLoaderData();
     const [loadingUser, setLoadingUser] = useState<string>();
 
     const fetchPage = useCallback((page: number) => searchUsers(searchQuery as string, page, PAGE_SIZE).then((res) => res.usernames), [searchQuery]);
 
-    const { isPageLoading, entries: usernames, nextPage } = usePagination<string>(PAGE_SIZE, firstPageUsernames, totalCount, fetchPage);
+    const { 
+        isPageLoading, 
+        entries: usernames, 
+        nextPage 
+    } = usePagination<string>({
+        fetchPage,
+        firstPageEntries,
+        pageSize: PAGE_SIZE,
+        entryCount: totalCount,
+    });
 
     useEffect(() => {
         const handleScroll = throttle(() => {
