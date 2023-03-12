@@ -1,4 +1,5 @@
-import { FormEvent, useEffect, useState } from 'react';
+import type { FormEvent} from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, Outlet, useParams } from '@remix-run/react';
 
 import { SearchContainer, Title, SearchForm, SearchInput, SearchButton } from './Search.styles';

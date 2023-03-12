@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 
 /**
  * Custom React hook for handling pagination logic.
@@ -44,8 +44,8 @@ const usePagination = <T,>({
         pageCount: Math.ceil(entryCount / pageSize),
         isLastPage: page === Math.ceil(entryCount / pageSize),
         page,
-        nextPage: () => setPage(p => p + 1),
-        previousPage: () => setPage(p => p - 1),
+        nextPage: useCallback(() => setPage(p => p + 1), [setPage]),
+        previousPage: useCallback(() => setPage(p => p - 1), [setPage]),
         pageEntries: entries.slice((page - 1) * pageSize, page * pageSize)
     };
 }

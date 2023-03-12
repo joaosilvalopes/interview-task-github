@@ -1,4 +1,4 @@
-import { createMemoryHistory, To } from '@remix-run/router';
+import { createMemoryHistory } from '@remix-run/router';
 import { render, fireEvent, waitFor } from '@testing-library/react';
 
 import withRouter from '~/test-utils/withRouter';
@@ -26,9 +26,9 @@ describe('Search component', () => {
 
     await waitFor(() => {
       expect(history.location.pathname).toBe(`/search/${searchQuery}`);
-      expect(getByTestId('search-button')).toHaveTextContent('Search');
     });
 
+    expect(getByTestId('search-button')).toHaveTextContent('Search');
     expect(asFragment()).toMatchSnapshot();
   });
 });

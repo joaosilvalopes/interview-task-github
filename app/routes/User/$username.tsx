@@ -1,9 +1,11 @@
-import { LoaderArgs } from '@remix-run/node';
+import type { LoaderArgs } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
 import usePagination from '~/hooks/usePagination';
 
-import getRepositories, { Repository } from '~/sdk/getRepositories';
-import getUser, { User } from '~/sdk/getUser';
+import type { Repository } from '~/sdk/getRepositories';
+import getRepositories from '~/sdk/getRepositories';
+import type { User } from '~/sdk/getUser';
+import getUser from '~/sdk/getUser';
 
 import { BackLink, Pagination, PaginationButton, UserAvatar, UserHeader, UserName, UserRepositoriesCount, UserRepositoriesList, UserRepository, UserRepositoryDescription, UserRepositoryName, PageCount } from './$username.styles';
 

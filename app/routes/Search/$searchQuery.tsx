@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useLoaderData, useParams } from '@remix-run/react';
-import { LoaderArgs } from '@remix-run/node';
+import type { LoaderArgs } from '@remix-run/node';
 import throttle from 'lodash.throttle';
 
 import { SearchResultList, SearchResultListItem, SearchResultLink } from './$searchQuery.styles';
@@ -61,7 +61,7 @@ const SearchResults = () => {
         return () => {
             document.removeEventListener('scroll', handleScroll);
         };
-    }, []);
+    }, [nextPage]);
 
     return (
         <>

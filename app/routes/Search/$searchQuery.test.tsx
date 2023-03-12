@@ -1,5 +1,5 @@
 import { createMemoryHistory } from '@remix-run/router';
-import { render, fireEvent, waitFor, act } from '@testing-library/react';
+import { render, fireEvent, waitFor } from '@testing-library/react';
 
 import SearchResults, { PAGE_SIZE } from './$searchQuery';
 import withRouter from '~/test-utils/withRouter';
@@ -44,7 +44,7 @@ describe('Search component', () => {
   });
 
   it('fetches the next page of users when scrolled to the bottom of the page', async () => {
-    const { getByTestId, asFragment } = render(<SearchWithRouter/>);
+    const { getByTestId, asFragment, queryByTestId } = render(<SearchWithRouter/>);
 
     // Scroll to the bottom of the page
     window.innerHeight = 500;
@@ -57,13 +57,19 @@ describe('Search component', () => {
 
     const lastPage = Math.ceil(usernames.length / PAGE_SIZE);
 
-    for(let page = 1; page <= lastPage; page++) {
+    for(let page = 1; page < lastPage; page++) {
       await expectPageResult(page, getByTestId);
   
       fireEvent.scroll(document);
 
-      page < lastPage && expect(getByTestId('loading-indicator')).toBeInTheDocument();
+      expect(getByTestId('loading-indicator')).toBeInTheDocument();
     }
+
+    await expectPageResult(lastPage, getByTestId);
+
+    fireEvent.scroll(document);
+
+    expect(queryByTestId('loading-indicator')).not.toBeInTheDocument();
 
     expect(asFragment()).toMatchSnapshot();
   });
