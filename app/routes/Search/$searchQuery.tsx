@@ -3,7 +3,7 @@ import { useLoaderData, useParams } from '@remix-run/react';
 import { LoaderArgs } from '@remix-run/node';
 import throttle from 'lodash.throttle';
 
-import { SearchResultList, SearchResultListItem, SearchResultLink } from '../Search.styles';
+import { SearchResultList, SearchResultListItem, SearchResultLink } from './$searchQuery.styles';
 
 import searchUsers from '~/sdk/searchUsers';
 

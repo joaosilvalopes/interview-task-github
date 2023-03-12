@@ -1,7 +1,7 @@
 import { FormEvent, useEffect, useState } from 'react';
 import { useNavigate, Outlet, useParams } from '@remix-run/react';
 
-import { SearchContainer, Title, SearchForm, SearchInput, SearchButton, SearchResultList, SearchResultListItem, SearchResultLink } from './Search.styles';
+import { SearchContainer, Title, SearchForm, SearchInput, SearchButton } from './Search.styles';
 
 type SearchFormOnSubmitEvent = FormEvent<HTMLFormElement> & {
   target: HTMLFormElement & {

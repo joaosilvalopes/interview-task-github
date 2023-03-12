@@ -1,90 +1,35 @@
-import { Routes, Route, MemoryRouter as Router } from 'react-router-dom';
+import { createMemoryHistory, To } from '@remix-run/router';
 import { render, fireEvent, waitFor } from '@testing-library/react';
 
+import withRouter from '~/test-utils/withRouter';
+
 import Search from './Search';
-import SearchResults from './Search/$searchQuery';
 
-const pageSize = 100;
-const usernames = Array.from({ length: pageSize * 3 }, (_, i) => `user${i+1}`);
-const usernamesFirstPage = usernames.slice(0, pageSize);
+const history = createMemoryHistory({ initialEntries: ['/search'], v5Compat: true });
 
-jest.mock('~/sdk/searchUsers', () => jest.fn((_,page) => {
-  return new Promise((resolve) => setTimeout(() => resolve({ totalCount: usernames.length, usernames: usernames.slice((page - 1) * pageSize, page * pageSize) }), 100));
-}));
-
-jest.mock('@remix-run/react', () => ({
-  ...jest.requireActual('@remix-run/react'),
-  useLoaderData: jest.fn(() => ({
-      totalCount: usernames.length,
-      usernames: usernamesFirstPage,
-  })),
-}));
-
-const renderWithRouter = () => render(
-  <Router initialEntries={['/search']}>
-    <Routes>
-      <Route path="search" element={<Search/>}>
-        <Route path=":searchQuery" element={<SearchResults />}></Route>
-      </Route>
-    </Routes>
-  </Router>
-);
+const SearchWithRouter = withRouter(Search, { path: '/search/:searchQuery?', history });
 
 describe('Search component', () => {
-  const expectPageResult = async (page: number, getByTestId: (testId: string) => HTMLElement) => {
-    await waitFor(() => {
-      expect(getByTestId('result-count')).toHaveTextContent(`Found ${usernames.length} results for testQuery`);
-
-      usernames.slice(0, pageSize * page).forEach((username) => {
-        expect(getByTestId(`search-result-link-${username}`)).toHaveTextContent(username);
-        expect(getByTestId(`search-result-link-${username}`)).toHaveAttribute('href', `/user/${username}`);
-      });
-    });
-  }
-
-  it('renders the search input and button', () => {
-    const { getByTestId, asFragment } = renderWithRouter();
+  it('renders correctly and redirects to /search/:searchQuery on search form submit', async () => {
+    const { getByTestId, asFragment } = render(<SearchWithRouter />);
 
     expect(getByTestId('search-form')).toBeInTheDocument();
     expect(getByTestId('search-input')).toBeInTheDocument();
     expect(getByTestId('search-button')).toBeInTheDocument();
-    expect(asFragment()).toMatchSnapshot();
-  });
+    expect(getByTestId('search-button')).toHaveTextContent('Search');
 
-  it('searches for users when the form is submitted', async () => {
-    const { getByTestId, asFragment } = renderWithRouter();
+    const searchQuery = 'testQuery';
 
-    fireEvent.submit(getByTestId('search-form'), { target: { username: { value: 'testQuery' } } });
+    fireEvent.submit(getByTestId('search-form'), { target: { username: { value: searchQuery } } });
 
-    await expectPageResult(1, getByTestId);
+    expect(getByTestId('search-button')).toHaveTextContent('Loading');
 
-    expect(asFragment()).toMatchSnapshot();
-  });
-
-  it('fetches the next page of users when scrolled to the bottom of the page', async () => {
-    const { getByTestId, asFragment } = renderWithRouter();
-
-    // Scroll to the bottom of the page
-    window.innerHeight = 500;
-    document.documentElement.scrollTop = 1000;
-
-    Object.defineProperty(document.documentElement, 'offsetHeight', {
-      writable: true,
-      value: 1500,
+    await waitFor(() => {
+      expect(history.location.pathname).toBe(`/search/${searchQuery}`);
+      expect(getByTestId('search-button')).toHaveTextContent('Search');
     });
-
-    fireEvent.submit(getByTestId('search-form'), { target: { username: { value: 'testQuery' } } });
-
-    const lastPage = Math.ceil(usernames.length / pageSize);
-
-    for(let page = 1; page <= lastPage; page++) {
-      await expectPageResult(page, getByTestId);
-  
-      fireEvent.scroll(document);
-
-      page < lastPage && expect(getByTestId('loading-indicator')).toBeInTheDocument();
-    }
 
     expect(asFragment()).toMatchSnapshot();
   });
 });
+
