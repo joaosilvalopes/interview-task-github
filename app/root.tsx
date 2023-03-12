@@ -8,6 +8,8 @@ import {
   ScrollRestoration,
 } from "@remix-run/react";
 
+import ThemeProvider from './theme';
+
 export const meta: MetaFunction = () => ({
   charset: "utf-8",
   title: "Interview Task Github",
@@ -32,7 +34,9 @@ export default function App() {
         {typeof document === "undefined" ? "__STYLES__" : null /** Place to inject styled components */}
       </head>
       <body>
-        <Outlet />
+        <ThemeProvider>
+          <Outlet />
+        </ThemeProvider>
         <ScrollRestoration />
         <Scripts />
         <LiveReload />

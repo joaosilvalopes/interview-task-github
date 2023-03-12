@@ -4,65 +4,87 @@ export const SearchContainer = styled.main`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 2rem;
   min-height: 100vh;
+  padding: 2rem;
+  color: ${props => props.theme.colors.main};
+  background-color: ${props => props.theme.colors.mainBackground};
 
-  @media only screen and (min-width: 768px) {
+  ${props => props.theme.media.gteSm} {
     padding: 4rem;
   }
 `;
 
 export const Title = styled.h1`
-  margin-bottom: 3rem;
-  font-size: 3rem;
-  color: #333;
+  margin-bottom: 2rem;
+  font-size: 2rem;
+  font-weight: 700;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.2rem;
+
+  ${props => props.theme.media.gteSm} {
+    font-size: 2.5rem;
+    margin-bottom: 3rem;
+  }
+
+  ${props => props.theme.media.gteLg} {
+    font-size: 3.5rem;
+  }
 `;
 
 export const SearchForm = styled.form`
   display: flex;
   justify-content: center;
-  flex-wrap: wrap;
+  flex-direction: column;
+  align-items: center;
   width: 100%;
-  max-width: 40rem;
-  margin-bottom: 2rem;
+  max-width: 50rem;
+  margin-bottom: 3rem;
+
+  ${props => props.theme.media.gteSm} {
+    flex-direction: row;
+  }
 `;
 
 export const SearchInput = styled.input`
-  padding: 0.5rem;
   width: 100%;
-  border-radius: 0.5rem 0.5rem 0 0;
-  border: 0.1rem solid #ccc;
-  font-size: 1.6rem;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  border: 0.1rem solid ${props => props.theme.colors.searchInputBorder};
+  color: ${props => props.theme.colors.searchInput};
+  background-color: ${props => props.theme.colors.searchInputBackground};
+  font-size: 2rem;
 
   &:focus {
     outline: none;
-    border-color: #0077b6;
-    box-shadow: 0 0 0 0.2rem rgba(0, 119, 182, 0.25);
+    border-color: ${props => props.theme.colors.searchInputBorderOnFocus};
   }
 
-  @media only screen and (min-width: 768px) {
-    width: 50%;
+  ${props => props.theme.media.gteSm} {
     border-radius: 0.5rem 0 0 0.5rem;
+    border-right: none;
   }
 `;
 
 export const SearchButton = styled.button`
-  padding: 0.5rem 1rem;
-  border-radius: 0 0 0.5rem 0.5rem;
-  background-color: #0077b6;
-  color: #fff;
+  padding: 1rem 2rem;
+  border-radius: 0.5rem;
+  color: ${props => props.theme.colors.searchButton};
+  background-color: ${props => props.theme.colors.searchButtonBackground};
   border: none;
   cursor: pointer;
-  width: 100%;
-  font-size: 1.6rem;
+  font-size: 2rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1rem;
   transition: background-color 0.3s;
+  margin-top: 1rem;
 
-  @media only screen and (min-width: 768px) {
-    width: auto;
+  ${props => props.theme.media.gteSm} {
     border-radius: 0 0.5rem 0.5rem 0;
+    margin: 0;
   }
 
   &:hover {
-    background-color: #023e8a;
+    background-color: ${props => props.theme.colors.searchButtonBackgroundOnHover};
   }
 `;
