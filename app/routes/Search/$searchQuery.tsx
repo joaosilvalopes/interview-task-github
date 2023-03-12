@@ -9,6 +9,8 @@ import searchUsers from '~/sdk/searchUsers';
 
 import usePagination from '~/hooks/usePagination';
 
+import Spinner from '~/components/Spinner';
+
 type SearchLoaderArgs = LoaderArgs & {
     params: {
         searchQuery: string;
@@ -36,10 +38,10 @@ const SearchResults = () => {
 
     const fetchPage = useCallback((page: number) => searchUsers(searchQuery as string, page, PAGE_SIZE).then((res) => res.usernames), [searchQuery]);
 
-    const { 
-        isPageLoading, 
-        entries: usernames, 
-        nextPage 
+    const {
+        isPageLoading,
+        entries: usernames,
+        nextPage
     } = usePagination<string>({
         fetchPage,
         firstPageEntries,
@@ -70,11 +72,11 @@ const SearchResults = () => {
                 <SearchResultList>
                     {usernames.map((username) => (
                         <SearchResultListItem key={username}>
-                            <SearchResultLink onClick={() => setLoadingUser(username)} to={`/user/${username}`} data-testid={`search-result-link-${username}`}>{loadingUser === username ? 'Loading' : username}</SearchResultLink>
+                            <SearchResultLink onClick={() => setLoadingUser(username)} to={`/user/${username}`} data-testid={`search-result-link-${username}`}>{loadingUser === username ? <Spinner data-testid={`loading-indicator-${username}`} /> : username}</SearchResultLink>
                         </SearchResultListItem>
                     ))}
                 </SearchResultList>}
-            {isPageLoading && <p data-testid="loading-indicator">Loading...</p>}
+            {isPageLoading && <Spinner data-testid="loading-indicator" />}
         </>
     );
 }

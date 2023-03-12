@@ -14,7 +14,8 @@ export const SearchResultListItem = styled.li`
 `;
 
 export const SearchResultLink = styled(Link)`
-  display: block;
+  display: flex;
+  justify-content: center;
   padding: 1rem;
   text-decoration: none;
   font-size: 1.6rem;

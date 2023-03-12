@@ -4,6 +4,8 @@ import { render, fireEvent, waitFor } from '@testing-library/react';
 import SearchResults, { PAGE_SIZE } from './$searchQuery';
 import withRouter from '~/test-utils/withRouter';
 
+import ThemeProvider from '~/theme';
+
 const usernames = Array.from({ length: PAGE_SIZE * 3 }, (_, i) => `user${i+1}`);
 const usernamesFirstPage = usernames.slice(0, PAGE_SIZE);
 
@@ -36,7 +38,7 @@ describe('Search component', () => {
   }
 
   it('searches for users when the form is submitted', async () => {
-    const { getByTestId, asFragment } = render(<SearchWithRouter/>);
+    const { getByTestId, asFragment } = render(<ThemeProvider><SearchWithRouter /></ThemeProvider>);
 
     await expectPageResult(1, getByTestId);
 
@@ -44,7 +46,7 @@ describe('Search component', () => {
   });
 
   it('fetches the next page of users when scrolled to the bottom of the page', async () => {
-    const { getByTestId, asFragment, queryByTestId } = render(<SearchWithRouter/>);
+    const { getByTestId, asFragment, queryByTestId } = render(<ThemeProvider><SearchWithRouter /></ThemeProvider>);
 
     // Scroll to the bottom of the page
     window.innerHeight = 500;
@@ -75,7 +77,7 @@ describe('Search component', () => {
   });
 
   it('redirects to /user/:username on username link click', async () => {
-    const { getByTestId, asFragment } = render(<SearchWithRouter/>);
+    const { getByTestId, asFragment } = render(<ThemeProvider><SearchWithRouter /></ThemeProvider>);
 
     await expectPageResult(1, getByTestId);
 
@@ -83,7 +85,7 @@ describe('Search component', () => {
 
     fireEvent.click(link);
 
-    expect(link).toHaveTextContent('Loading');
+    expect(getByTestId(`loading-indicator-${usernames[0]}`)).toBeInTheDocument();
 
     expect(asFragment()).toMatchSnapshot();
 

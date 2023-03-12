@@ -2,6 +2,8 @@ import type { FormEvent} from 'react';
 import { useEffect, useState } from 'react';
 import { useNavigate, Outlet, useParams } from '@remix-run/react';
 
+import Spinner from '~/components/Spinner';
+
 import { SearchContainer, Title, SearchForm, SearchInput, SearchButton } from './Search.styles';
 
 type SearchFormOnSubmitEvent = FormEvent<HTMLFormElement> & {
@@ -35,7 +37,7 @@ const Search = () => {
       <Title>Github User Search</Title>
       <SearchForm onSubmit={handleSubmit} data-testid="search-form">
         <SearchInput placeholder="username" type="text" id="username" name="username" defaultValue={searchQuery} data-testid="search-input" />
-        <SearchButton type="submit" data-testid="search-button">{loading ? 'Loading' : 'Search'}</SearchButton>
+        <SearchButton type="submit" disabled={loading} data-testid="search-button">{loading ? <Spinner /> : 'Search'}</SearchButton>
       </SearchForm>
       <Outlet key={searchQuery} />
     </SearchContainer>

@@ -43,6 +43,7 @@ export const SearchForm = styled.form`
 
   ${props => props.theme.media.gteSm} {
     flex-direction: row;
+    align-items: stretch;
   }
 `;
 

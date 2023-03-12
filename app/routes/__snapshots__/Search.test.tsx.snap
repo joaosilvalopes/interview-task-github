@@ -3,19 +3,19 @@
 exports[`Search component renders correctly and redirects to /search/:searchQuery on search form submit 1`] = `
 <DocumentFragment>
   <main
-    class="sc-beySbM ecnJdQ"
+    class="sc-guDLRT cfrsZH"
   >
     <h1
-      class="sc-guDLRT hBSIrn"
+      class="sc-dmyDGi la-dpvD"
     >
       Github User Search
     </h1>
     <form
-      class="sc-dmyDGi lhIuuh"
+      class="sc-hLQRIN kNWwZi"
       data-testid="search-form"
     >
       <input
-        class="sc-hLQRIN dXWFfT"
+        class="sc-eDLJxc eKA-Ddj"
         data-testid="search-input"
         id="username"
         name="username"
@@ -24,7 +24,7 @@ exports[`Search component renders correctly and redirects to /search/:searchQuer
         value="testQuery"
       />
       <button
-        class="sc-eDLJxc jIgEkF"
+        class="sc-jTQDnj tuZwV"
         data-testid="search-button"
         type="submit"
       >
