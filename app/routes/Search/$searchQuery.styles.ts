@@ -1,8 +1,10 @@
 import styled from 'styled-components';
 import { Link } from '@remix-run/react';
 
+import Spinner from '~/components/Spinner';
+
 export const SearchResultList = styled.ul`
-  margin: 2rem 0;
+  margin: 2rem 0 0;
   padding: 0;
   width: 100%;
   max-width: 40rem;
@@ -31,4 +33,9 @@ export const SearchResultLink = styled(Link).withConfig<{ loading: boolean }>({ 
   }
 
   ${props => props.loading && `cursor: wait;`}
+`;
+
+export const InfiniteScrollSpinner = styled(Spinner)`
+  margin-top: 1rem;
+  font-size: 4rem;
 `;

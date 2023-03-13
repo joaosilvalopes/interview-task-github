@@ -3,7 +3,7 @@ import { useLoaderData, useParams } from '@remix-run/react';
 import type { LoaderArgs } from '@remix-run/node';
 import throttle from 'lodash.throttle';
 
-import { SearchResultList, SearchResultListItem, SearchResultLink } from './$searchQuery.styles';
+import { SearchResultList, SearchResultListItem, SearchResultLink, InfiniteScrollSpinner } from './$searchQuery.styles';
 
 import searchUsers from '~/sdk/searchUsers';
 
@@ -76,7 +76,7 @@ const SearchResults = () => {
                         </SearchResultListItem>
                     ))}
                 </SearchResultList>}
-            {isPageLoading && <Spinner data-testid="loading-indicator" />}
+            {isPageLoading && <InfiniteScrollSpinner data-testid="loading-indicator" />}
         </>
     );
 }
