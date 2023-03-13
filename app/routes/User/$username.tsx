@@ -1,5 +1,6 @@
 import type { LoaderArgs } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
+import Spinner from '~/components/Spinner';
 import usePagination from '~/hooks/usePagination';
 
 import type { Repository } from '~/sdk/getRepositories';
@@ -7,7 +8,22 @@ import getRepositories from '~/sdk/getRepositories';
 import type { User } from '~/sdk/getUser';
 import getUser from '~/sdk/getUser';
 
-import { BackLink, Pagination, PaginationButton, UserAvatar, UserHeader, UserName, UserRepositoriesCount, UserRepositoriesList, UserRepository, UserRepositoryDescription, UserRepositoryName, PageCount } from './$username.styles';
+import {
+  BackLink,
+  Pagination,
+  PaginationButton,
+  UserAvatar,
+  UserHeader,
+  UserName,
+  UserRepositoriesCount,
+  UserRepositoriesList,
+  UserRepository,
+  UserRepositoryDescription,
+  UserRepositoryName,
+  PageCount,
+  UserContainer,
+  PageSpinner
+} from './$username.styles';
 
 type UserLoaderArgs = LoaderArgs & {
   params: {
@@ -20,7 +36,7 @@ type ServerData = {
   repositories: Repository[];
 };
 
-export const PAGE_SIZE = 10;
+export const PAGE_SIZE = 5;
 
 export const loader = async ({ params }: UserLoaderArgs) => {
   const { username } = params;
@@ -56,17 +72,17 @@ const UserPage = () => {
   });
 
   return (
-    <>
+    <UserContainer>
       <UserHeader>
         <UserAvatar src={user.avatarUrl} data-testid="user-avatar" />
         <UserName data-testid="user-name">{user.name}</UserName>
-        <UserRepositoriesCount data-testid="user-repos-count">Total number of repositories: {user.repositoriesCount}</UserRepositoriesCount>
+        <UserRepositoriesCount data-testid="user-repos-count">Found {user.repositoriesCount} repositories</UserRepositoriesCount>
       </UserHeader>
       <UserRepositoriesList>
-        {isPageLoading ? <p data-testid="loading-page-indicator">Loading</p> : visibleRepos.map(repo => (
+        {isPageLoading ? <PageSpinner data-testid="loading-page-indicator" /> : visibleRepos.map(repo => (
           <UserRepository key={repo.id}>
             <UserRepositoryName data-testid={`repo-name-${repo.id}`}>{repo.name}</UserRepositoryName>
-            <UserRepositoryDescription data-testid={`repo-description-${repo.id}`}>{repo.description}</UserRepositoryDescription>
+            {repo.description && <UserRepositoryDescription data-testid={`repo-description-${repo.id}`}>{repo.description}</UserRepositoryDescription>}
           </UserRepository>
         ))}
       </UserRepositoriesList>
@@ -79,12 +95,12 @@ const UserPage = () => {
         <PageCount data-testid="page-count">{page}/{pageCount}</PageCount>
         {page < pageCount && (
           <PaginationButton data-testid="next-page-button" disabled={isPageLoading} onClick={nextPage}>
-            Next
+            { isPageLoading ? <Spinner /> : 'Next' } 
           </PaginationButton>
         )}
       </Pagination>
-      <BackLink to="/">Go back to Root route</BackLink>
-    </>
+      <BackLink data-testid="back-link" to="/">Back</BackLink>
+    </UserContainer>
   );
 };
 

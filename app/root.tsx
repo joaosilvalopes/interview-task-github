@@ -29,6 +29,10 @@ export default function App() {
             * {
               box-sizing: border-box;
             }
+
+            html {
+              font-family: Arial, Helvetica, sans-serif;
+            }
           `}
         </style>
         {typeof document === "undefined" ? "__STYLES__" : null /** Place to inject styled components */}

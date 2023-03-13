@@ -13,5 +13,19 @@ export default {
         searchResultOnHover: '#fff',
         searchResultBackground: '#fff',
         searchResultBackgroundOnHover: '#0077b6',
+        userHeaderBackground: '#eaeaea',
+        userPaginationButton: '#fff',
+        userPaginationButtonBackground: '#0077b6',
+        userPaginationButtonBackgroundOnHover: '#023e8a',
+        userRepositoryBorder: '#ccc',
+        backButton: '#fff',
+        backButtonBackground: '#0077b6',
+        backButtonBackgroundOnHover: '#023e8a',
+        username: '#333',
+        userRepositoriesCount: '#666',
+        userRepositoryName: '#333',
+        userRepositoriesDescription: '#666',
+        pageCount: '#333',
+        pageSpinner: '#0077b6'
     }
 };

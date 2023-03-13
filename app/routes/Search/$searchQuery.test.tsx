@@ -25,28 +25,35 @@ const history = createMemoryHistory({ initialEntries: ['/search/testQuery'], v5C
 
 const SearchWithRouter = withRouter(SearchResults, { path: '/search/:searchQuery', history });
 
-describe('Search component', () => {
-  const expectPageResult = async (page: number, getByTestId: (testId: string) => HTMLElement) => {
-    await waitFor(() => {
-      expect(getByTestId('result-count')).toHaveTextContent(`Found ${usernames.length} results for testQuery`);
+const renderWithProviders = () =>  render(<ThemeProvider><SearchWithRouter /></ThemeProvider>);
 
-      usernames.slice(0, PAGE_SIZE * page).forEach((username) => {
-        expect(getByTestId(`search-result-link-${username}`)).toHaveTextContent(username);
-        expect(getByTestId(`search-result-link-${username}`)).toHaveAttribute('href', `/user/${username}`);
-      });
-    });
+describe('Search component', () => {
+  const expectPageResult = async (page: number, getByTestId: (testId: string) => HTMLElement, getAllByTestId: (testId: RegExp) => HTMLElement[]) => {
+      const visibleUsernames = usernames.slice(0, PAGE_SIZE * page);
+
+      await waitFor(() => expect(getAllByTestId(/^search-result-link-user[0-9]+/)).toHaveLength(visibleUsernames.length));
+      await waitFor(() => expect(getAllByTestId(/^search-result-link-user[0-9]+/)).toHaveLength(visibleUsernames.length));
+
+      for(const username of visibleUsernames) {
+          await waitFor(() => expect(getByTestId(`search-result-link-${username}`)).toHaveTextContent(username));
+          await waitFor(() => expect(getByTestId(`search-result-link-${username}`)).toHaveAttribute('href', `/user/${username}`));
+      }
   }
 
   it('searches for users when the form is submitted', async () => {
-    const { getByTestId, asFragment } = render(<ThemeProvider><SearchWithRouter /></ThemeProvider>);
+    const { getAllByTestId, getByTestId, asFragment } = renderWithProviders();
 
-    await expectPageResult(1, getByTestId);
+    expect(getByTestId('result-count')).toHaveTextContent(`Found ${usernames.length} results for testQuery`);
+
+    await expectPageResult(1, getByTestId, getAllByTestId);
 
     expect(asFragment()).toMatchSnapshot();
   });
 
   it('fetches the next page of users when scrolled to the bottom of the page', async () => {
-    const { getByTestId, asFragment, queryByTestId } = render(<ThemeProvider><SearchWithRouter /></ThemeProvider>);
+    const { getByTestId, asFragment, queryByTestId, getAllByTestId } = renderWithProviders();
+
+    expect(getByTestId('result-count')).toHaveTextContent(`Found ${usernames.length} results for testQuery`);
 
     // Scroll to the bottom of the page
     window.innerHeight = 500;
@@ -60,14 +67,14 @@ describe('Search component', () => {
     const lastPage = Math.ceil(usernames.length / PAGE_SIZE);
 
     for(let page = 1; page < lastPage; page++) {
-      await expectPageResult(page, getByTestId);
+      await expectPageResult(page, getByTestId, getAllByTestId);
   
       fireEvent.scroll(document);
 
       expect(getByTestId('loading-indicator')).toBeInTheDocument();
     }
 
-    await expectPageResult(lastPage, getByTestId);
+    await expectPageResult(lastPage, getByTestId, getAllByTestId);
 
     fireEvent.scroll(document);
 
@@ -77,9 +84,11 @@ describe('Search component', () => {
   });
 
   it('redirects to /user/:username on username link click', async () => {
-    const { getByTestId, asFragment } = render(<ThemeProvider><SearchWithRouter /></ThemeProvider>);
+    const { getByTestId, asFragment, getAllByTestId } = renderWithProviders();
 
-    await expectPageResult(1, getByTestId);
+    expect(getByTestId('result-count')).toHaveTextContent(`Found ${usernames.length} results for testQuery`);
+
+    await expectPageResult(1, getByTestId, getAllByTestId);
 
     const link = getByTestId(`search-result-link-${usernames[0]}`);
 
