@@ -1,4 +1,4 @@
-import type { Dispatch, ReactElement, SetStateAction} from "react";
+import type { Dispatch, ReactNode, SetStateAction} from "react";
 import { createContext, useState } from "react";
 import { ThemeProvider as StyledComponentsThemeProvider } from "styled-components";
 
@@ -21,7 +21,7 @@ export type Theme = 'dark' | 'light';
 
 export const ThemeContext = createContext<[Theme, Dispatch<SetStateAction<Theme>>]>(['light', () => {}]);
 
-const ThemeProvider = ({ children }: { children: ReactElement }) => {
+const ThemeProvider = ({ children }: { children: ReactNode }) => {
     const [theme, setTheme] = useState<Theme>('light');
     
     return (

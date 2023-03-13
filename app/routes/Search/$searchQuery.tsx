@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useLoaderData, useParams } from '@remix-run/react';
 import type { LoaderArgs } from '@remix-run/node';
 import throttle from 'lodash.throttle';
@@ -35,6 +35,7 @@ const SearchResults = () => {
     const { searchQuery } = useParams();
     const { totalCount, usernames: firstPageEntries } = useLoaderData();
     const [loadingUser, setLoadingUser] = useState<string>();
+    const isPageLoadingRef = useRef<boolean>();
 
     const fetchPage = useCallback((page: number) => searchUsers(searchQuery as string, page, PAGE_SIZE).then((res) => res.usernames), [searchQuery]);
 
@@ -49,11 +50,13 @@ const SearchResults = () => {
         entryCount: totalCount,
     });
 
+    isPageLoadingRef.current = isPageLoading;
+
     useEffect(() => {
         const handleScroll = throttle(() => {
             const isAtPageBottom = window.innerHeight + document.documentElement.scrollTop === document.documentElement.offsetHeight;
 
-            if (isAtPageBottom) {
+            if (isAtPageBottom && !isPageLoadingRef.current) {
                 nextPage();
             }
         }, 100);

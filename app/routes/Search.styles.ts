@@ -4,7 +4,7 @@ export const SearchContainer = styled.main`
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-height: 100vh;
+  min-height: calc(100vh - ${props => props.theme.headerHeight});
   padding: 2rem;
   color: ${props => props.theme.colors.main};
   background-color: ${props => props.theme.colors.mainBackground};

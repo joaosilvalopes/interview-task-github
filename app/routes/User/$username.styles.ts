@@ -6,12 +6,12 @@ export const UserContainer = styled.main`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  min-height: 100vh;
+  min-height: calc(100vh - ${props => props.theme.headerHeight});
   color: ${props => props.theme.colors.main};
   background-color: ${props => props.theme.colors.mainBackground};
 `;
 
-export const UserHeader = styled.header`
+export const UserHeader = styled.div`
   display: flex;
   align-items: center;
   flex-direction: column;

@@ -1,0 +1,45 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Header component Redirects to / on home link click 1`] = `
+<DocumentFragment>
+  <header
+    class="sc-beySbM fiMPnF"
+  >
+    <a
+      class="sc-guDLRT hbtjoA"
+      data-testid="home-link"
+      href="/"
+    >
+      ⌂
+    </a>
+    <button
+      class="sc-dmyDGi hpQBLb"
+      data-testid="change-theme-button"
+    >
+      ☀
+    </button>
+  </header>
+</DocumentFragment>
+`;
+
+exports[`Header component renders correctly and changes theme on change theme button click 1`] = `
+<DocumentFragment>
+  <header
+    class="sc-beySbM ezJJWJ"
+  >
+    <a
+      class="sc-guDLRT hLzZhb"
+      data-testid="home-link"
+      href="/"
+    >
+      ⌂
+    </a>
+    <button
+      class="sc-dmyDGi jMgBXg"
+      data-testid="change-theme-button"
+    >
+      ☽
+    </button>
+  </header>
+</DocumentFragment>
+`;

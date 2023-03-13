@@ -10,6 +10,8 @@ import {
 
 import ThemeProvider from './theme';
 
+import Header from './components/Header';
+
 export const meta: MetaFunction = () => ({
   charset: "utf-8",
   title: "Interview Task Github",
@@ -39,6 +41,7 @@ export default function App() {
       </head>
       <body>
         <ThemeProvider>
+          <Header />
           <Outlet />
         </ThemeProvider>
         <ScrollRestoration />

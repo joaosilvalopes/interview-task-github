@@ -3,7 +3,7 @@
 exports[`Search component renders correctly and redirects to /search/:searchQuery on search form submit 1`] = `
 <DocumentFragment>
   <main
-    class="sc-guDLRT cfrsZH"
+    class="sc-guDLRT gROjFK"
   >
     <h1
       class="sc-dmyDGi la-dpvD"

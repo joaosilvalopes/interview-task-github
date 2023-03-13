@@ -26,6 +26,10 @@ export default {
         userRepositoryName: '#333',
         userRepositoriesDescription: '#666',
         pageCount: '#333',
-        pageSpinner: '#0077b6'
+        pageSpinner: '#0077b6',
+        header: '#333',
+        homeLinkOnHover: '#023e8a',
+        changeThemeButtonOnHover: '#023e8a',
+        headerBackground: '#ccc'
     }
 };

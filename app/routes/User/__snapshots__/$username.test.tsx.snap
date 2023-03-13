@@ -5,9 +5,9 @@ exports[`UserPage component redirects to root route on back link click 1`] = `<D
 exports[`UserPage component renders user information and repositories 1`] = `
 <DocumentFragment>
   <main
-    class="sc-guDLRT hctgvg"
+    class="sc-guDLRT fLwWYZ"
   >
-    <header
+    <div
       class="sc-dmyDGi kYKMGh"
     >
       <img
@@ -27,7 +27,7 @@ exports[`UserPage component renders user information and repositories 1`] = `
       >
         Found 30 repositories
       </p>
-    </header>
+    </div>
     <ul
       class="sc-gLLvby iXzDYo"
     >
