@@ -24,7 +24,7 @@ exports[`Search component renders correctly and redirects to /search/:searchQuer
         value="testQuery"
       />
       <button
-        class="sc-jTQDnj tuZwV"
+        class="sc-jTQDnj iVwqDv"
         data-testid="search-button"
         type="submit"
       >

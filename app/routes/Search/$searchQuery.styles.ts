@@ -13,7 +13,7 @@ export const SearchResultListItem = styled.li`
   text-align: center;
 `;
 
-export const SearchResultLink = styled(Link)`
+export const SearchResultLink = styled(Link).withConfig<{ loading: boolean }>({ shouldForwardProp: (prop, isValidProp) => prop !== 'loading' && isValidProp(prop) })`
   display: flex;
   justify-content: center;
   padding: 1rem;
@@ -29,4 +29,6 @@ export const SearchResultLink = styled(Link)`
     color: ${props => props.theme.colors.searchResultOnHover};
     background-color: ${props => props.theme.colors.searchResultBackgroundOnHover};
   }
+
+  ${props => props.loading && `cursor: wait;`}
 `;

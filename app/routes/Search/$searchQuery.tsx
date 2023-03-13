@@ -72,7 +72,7 @@ const SearchResults = () => {
                 <SearchResultList>
                     {usernames.map((username) => (
                         <SearchResultListItem key={username}>
-                            <SearchResultLink onClick={() => setLoadingUser(username)} to={`/user/${username}`} data-testid={`search-result-link-${username}`}>{loadingUser === username ? <Spinner data-testid={`loading-indicator-${username}`} /> : username}</SearchResultLink>
+                            <SearchResultLink loading={loadingUser === username} onClick={() => setLoadingUser(username)} to={`/user/${username}`} data-testid={`search-result-link-${username}`}>{loadingUser === username ? <Spinner data-testid={`loading-indicator-${username}`} /> : username}</SearchResultLink>
                         </SearchResultListItem>
                     ))}
                 </SearchResultList>}

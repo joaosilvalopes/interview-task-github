@@ -85,7 +85,11 @@ export const SearchButton = styled.button`
     margin: 0;
   }
 
-  &:hover {
+  &:not(:disabled):hover {
     background-color: ${props => props.theme.colors.searchButtonBackgroundOnHover};
+  }
+
+  &:disabled {
+    cursor: wait;
   }
 `;
